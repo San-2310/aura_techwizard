@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aura_techwizard/views/KeyStrokeAnalysisScreen/KeystrokeAnalysisScreen.dart';
+import 'package:aura_techwizard/views/AnalysisScreens/CombinedAnalysisScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -52,15 +52,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => KeystrokeProvider()),
+        ChangeNotifierProvider(create: (_) => TextAnalysisProvider()),
         ChangeNotifierProvider(create: (_) => AppUsageProvider()),
       ],
       child: MaterialApp(
-        title: 'Keystroke Analysis App',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          fontFamily: 'Alegreya',
         ),
-        home: KeystrokeAnalysisScreen(),
+        home: CombinedAnalysisScreen(),
       ),
     );
   }
