@@ -1,11 +1,61 @@
+import 'package:aura_techwizard/models/user.dart' as ModelUser;
+import 'package:aura_techwizard/resources/user_provider.dart';
+import 'package:aura_techwizard/views/community_screen/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+  bool _isLoading = true;
+
+  // final List<Widget> _pages = [
+  //   HomeScreen(),
+  //   CommunityScreen(),
+  // ];
+
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.refreshUser();
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    final ModelUser.User? user = Provider.of<UserProvider>(context).getUser;
+
+    if (_isLoading || user == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -13,7 +63,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(user!.photoUrl,user!.fullname),
               const SizedBox(height: 20.0),
               _buildMoodIcons(),
               const SizedBox(height: 20.0),
@@ -26,49 +76,51 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        //backgroundColor: Colors.black87,
-        selectedItemColor: const Color.fromRGBO(55, 27, 52, 1),
-        unselectedItemColor: const Color.fromRGBO(205, 208, 227, 1),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   //backgroundColor: Colors.black87,
+      //   selectedItemColor: const Color.fromRGBO(55, 27, 52, 1),
+      //   unselectedItemColor: const Color.fromRGBO(205, 208, 227, 1),
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.group),
+      //       label: 'Community',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings),
+      //       label: 'Settings',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      // ),
     );
   }
 
-  Widget _buildHeader() {
-    return const Column(
+  Widget _buildHeader(String photoUrl, String name) {
+    return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ImageIcon(
+            const ImageIcon(
               AssetImage("assets/icons/menu.png"),
               size: 24.0,
             ),
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile_image.jpg'),
+                  backgroundImage: NetworkImage(photoUrl),
                   radius: 20.0,
                 ),
               ],
@@ -76,7 +128,7 @@ class HomeScreen extends StatelessWidget {
             //SizedBox(width: 10.0),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(
@@ -85,7 +137,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Welcome back, Sanjeev!',
+                  'Welcome back, $name!',
                   style: TextStyle(
                     color: Color.fromRGBO(55, 27, 52, 1),
                     fontSize: 26.0,
@@ -108,6 +160,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Widget _buildHeader(ModelUser.User? user) {
   Widget _buildMoodIcons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
