@@ -1,25 +1,67 @@
-import 'package:aura_techwizard/views/HomeScreen/HomeScreen.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
-  runApp(const MyApp());
+import 'package:aura_techwizard/views/KeyStrokeAnalysisScreen/KeystrokeAnalysisScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+//mport 'package:aura_techwizard/keystroke_analysis.dart'; // Adjust path as necessary
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future<void> initializeNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings(
+          '@mipmap/ic_launcher'); // Update icon path if necessary
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  if (Platform.isAndroid) {
+    // Request notifications permission on Android using permission_handler
+    final status = await Permission.notification.request();
+    if (status.isGranted) {
+      print("Notification permissions granted on Android.");
+    } else {
+      print("Notification permissions denied on Android.");
+    }
+  } else if (Platform.isIOS) {
+    // Request notifications permission on iOS
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+  }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeNotifications(); // Request notification permission here
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        fontFamily: 'Alegreya',
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => KeystrokeProvider()),
+        ChangeNotifierProvider(create: (_) => AppUsageProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Keystroke Analysis App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: KeystrokeAnalysisScreen(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
     );
   }
 }

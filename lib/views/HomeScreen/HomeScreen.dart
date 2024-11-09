@@ -7,6 +7,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //drawer: AppDra,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
