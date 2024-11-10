@@ -1,6 +1,10 @@
+import 'package:aura_techwizard/components/app_drawer.dart';
 import 'package:aura_techwizard/models/user.dart' as ModelUser;
 import 'package:aura_techwizard/resources/user_provider.dart';
-import 'package:aura_techwizard/views/community_screen/community_screen.dart';
+import 'package:aura_techwizard/views/JournalScreen4.dart';
+import 'package:aura_techwizard/views/games/relaxing_game/Screens/game_screen.dart';
+import 'package:aura_techwizard/views/health_wellness_tracker.dart';
+import 'package:aura_techwizard/views/speech_analysis/speech_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -13,19 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  
   bool _isLoading = true;
-
-  // final List<Widget> _pages = [
-  //   HomeScreen(),
-  //   CommunityScreen(),
-  // ];
-
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -57,66 +50,49 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+           _buildHeader(user!.photoUrl,user!.fullname),
+        ],
+      ),
+      drawer: AppDrawer(currentRoute: '/home'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(user!.photoUrl,user!.fullname),
+              //_buildHeader(user!.photoUrl,user!.fullname),
               const SizedBox(height: 20.0),
-              _buildMoodIcons(),
+              _buildMoodIcons(user!.fullname),
               const SizedBox(height: 20.0),
               _buildTherapySessions(),
               const SizedBox(height: 20.0),
               _buildActivities(),
               const SizedBox(height: 20.0),
               _buildTasks(),
+              
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      //   //backgroundColor: Colors.black87,
-      //   selectedItemColor: const Color.fromRGBO(55, 27, 52, 1),
-      //   unselectedItemColor: const Color.fromRGBO(205, 208, 227, 1),
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.group),
-      //       label: 'Community',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings),
-      //       label: 'Settings',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
     );
   }
 
   Widget _buildHeader(String photoUrl, String name) {
     return Column(
       children: [
-        const SizedBox(
-          height: 20,
-        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ImageIcon(
-              AssetImage("assets/icons/menu.png"),
-              size: 24.0,
-            ),
+            //  const ImageIcon(
+            //     AssetImage("assets/icons/menu.png"),
+            //     size: 24.0,
+            //   ),
+            
             Row(
               children: [
                 CircleAvatar(
@@ -128,16 +104,27 @@ class _HomeScreenState extends State<HomeScreen> {
             //SizedBox(width: 10.0),
           ],
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
+        
+      ],
+    );
+  }
+
+  // Widget _buildHeader(ModelUser.User? user) {
+  Widget _buildMoodIcons(String name) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+
         Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Welcome back, $name!',
+                  'Welcome back,\n$name!',
                   style: TextStyle(
                     color: Color.fromRGBO(55, 27, 52, 1),
                     fontSize: 26.0,
@@ -152,20 +139,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 20.0,
                   ),
                 ),
+                SizedBox(height: 20,),
               ],
             ),
           ],
         ),
-      ],
-    );
-  }
-
-  // Widget _buildHeader(ModelUser.User? user) {
-  Widget _buildMoodIcons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildMoodIcon(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+          _buildMoodIcon(
           iconPath: 'assets/icons/happy_icon.svg',
           label: 'Happy',
           bgColor: const Color(0xFFEF5DA8),
@@ -177,14 +159,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         _buildMoodIcon(
           iconPath: 'assets/icons/relax_icon.svg',
-          label: 'Relax',
+          label: 'Low',
           bgColor: const Color(0xFFF09A59),
         ),
         _buildMoodIcon(
           iconPath: 'assets/icons/focus_icon.svg',
-          label: 'Focus',
+          label: 'Stressed',
           bgColor: const Color(0xFFA0E3E2),
         ),
+        ],),
+        
       ],
     );
   }
@@ -305,25 +289,40 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildActivityIcon(
-          iconPath: 'assets/icons/journal_icon.svg',
-          label: 'Journal',
-          //iconColor: const Color(0xFFFBE2CC),
+        GestureDetector(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>DiaryScreen()));
+          },
+          child: _buildActivityIcon(
+            iconPath: 'assets/icons/journal_icon.svg',
+            label: 'Journal',
+            //iconColor: const Color(0xFFFBE2CC),
+          ),
         ),
         _buildActivityIcon(
           iconPath: 'assets/icons/music_icon.svg',
           label: 'Music',
           //iconColor: const Color(0xFFFFE1F1),
         ),
-        _buildActivityIcon(
-          iconPath: 'assets/icons/meditation_icon.svg',
-          label: 'Meditation',
-          //bgColor: const Color(0xFFD30A9A),
+        GestureDetector(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>HealthWellnessTrackerScreen()));
+          },
+          child: _buildActivityIcon(
+            iconPath: 'assets/icons/meditation_icon.svg',
+            label: 'Meditation',
+            //bgColor: const Color(0xFFD30A9A),
+          ),
         ),
-        _buildActivityIcon(
-          iconPath: 'assets/icons/relaxing_games_icon.svg',
-          label: ' Games',
-          //bgColor: const Color(0xFFC6C7FF),
+        GestureDetector(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>GameScreen()));
+          },
+          child: _buildActivityIcon(
+            iconPath: 'assets/icons/relaxing_games_icon.svg',
+            label: ' Games',
+            //bgColor: const Color(0xFFC6C7FF),
+          ),
         ),
       ],
     );

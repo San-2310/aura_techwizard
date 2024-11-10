@@ -1,6 +1,8 @@
 import 'package:aura_techwizard/views/HomeScreen/HomeScreen.dart';
 import 'package:aura_techwizard/views/community_screen/community_screen.dart';
 import 'package:aura_techwizard/views/community_screen/feed_screen.dart';
+import 'package:aura_techwizard/views/lifestyle/lifestlye_screen.dart';
+import 'package:aura_techwizard/views/user_profile.dart';
 import 'package:flutter/material.dart';
 
 class MainLayoutScreen extends StatefulWidget {
@@ -15,8 +17,8 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   final List<Widget> _pages = [
     HomeScreen(),
     FeedScreen(),
-    // SettingsScreen(),
-    // ProfileScreen(),
+    LifestlyeScreen(),
+    UserScreen(),
   ];
 
   // Function to handle item selection
@@ -45,8 +47,8 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
             label: 'Community',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.medical_services_outlined),
+            label: 'Lifestyle',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

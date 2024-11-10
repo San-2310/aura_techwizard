@@ -11,10 +11,9 @@ class AuthMethods{
  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<model.User> getUserDetails() async {
+    Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid!).get();
-
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
     return model.User.fromSnap(snap);
   }
 
@@ -24,12 +23,27 @@ class AuthMethods{
     required String username,
     required String fullname,
     required String contactnumber,
-    required Uint8List file,    
+    required Uint8List file,
+    required int age,
+    required double weight,
+    required double height,
+    required String wakeUpTime,
+    required String bedTime,
+    required String workStartTime,
+    required String workEndTime,
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty && fullname.isNotEmpty && contactnumber.isNotEmpty && file != null) {
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty && 
+          password.isNotEmpty && 
+          username.isNotEmpty && 
+          fullname.isNotEmpty && 
+          contactnumber.isNotEmpty && 
+          file != null) {
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email, 
+          password: password
+        );
         
         String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
 
@@ -40,6 +54,13 @@ class AuthMethods{
           fullname: fullname,
           photoUrl: photoUrl,
           contactnumber: contactnumber,
+          age: age,
+          weight: weight,
+          height: height,
+          wakeUpTime: wakeUpTime,
+          bedTime: bedTime,
+          workStartTime: workStartTime,
+          workEndTime: workEndTime,
         );
 
         await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
@@ -57,7 +78,6 @@ class AuthMethods{
     }
     return res;
   }
-
   //logging in
   Future<String> loginUser({
     required String email,
