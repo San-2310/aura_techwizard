@@ -170,14 +170,14 @@ class LikeAnimation extends StatefulWidget {
   final bool isLiked; // Add an isLiked flag to control the color
 
   const LikeAnimation({
-    Key? key,
+    super.key,
     required this.child,
     required this.isAnimating,
     this.duration = const Duration(milliseconds: 150),
     this.onEnd,
     this.smallLike = false,
     this.isLiked = false, // Default to not liked
-  }) : super(key: key);
+  });
 
   @override
   State<LikeAnimation> createState() => _LikeAnimationState();

@@ -13,7 +13,7 @@ class AuthMethods{
 
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid!).get();
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(snap);
   }
@@ -28,7 +28,7 @@ class AuthMethods{
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty && fullname.isNotEmpty && contactnumber.isNotEmpty && file != null) {
+      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty && fullname.isNotEmpty && contactnumber.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
         
         String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);

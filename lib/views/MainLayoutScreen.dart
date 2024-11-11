@@ -4,6 +4,8 @@ import 'package:aura_techwizard/views/community_screen/feed_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainLayoutScreen extends StatefulWidget {
+  const MainLayoutScreen({super.key});
+
   @override
   _MainLayoutScreenState createState() => _MainLayoutScreenState();
 }

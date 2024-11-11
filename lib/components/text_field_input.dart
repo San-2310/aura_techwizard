@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'colors.dart';
 
 class TextFieldInput extends StatelessWidget {
@@ -8,12 +9,12 @@ class TextFieldInput extends StatelessWidget {
   final TextInputType textInputType;
 
   const TextFieldInput({
-    Key? key,
+    super.key,
     required this.hintText,
     this.isPass = false,
     required this.textEditingController,
     required this.textInputType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,8 @@ class TextFieldInput extends StatelessWidget {
         hintStyle: TextStyle(color: AppColors.mediumGray),
         filled: true,
         fillColor: AppColors.paleGreen,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide.none,

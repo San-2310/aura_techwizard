@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 class PostCard extends StatefulWidget {
   final snap;
   const PostCard({
-    Key? key,
+    super.key,
     required this.snap,
-  }) : super(key: key);
+  });
 
   @override
   State<PostCard> createState() => _PostCardState();

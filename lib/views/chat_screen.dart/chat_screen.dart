@@ -14,7 +14,7 @@ class ChatScreen extends StatelessWidget {
   final TextEditingController _messageController = TextEditingController();
   Uint8List? _imageFile;
 
-  ChatScreen({
+  ChatScreen({super.key, 
     required this.userId,
     required this.username,
   });

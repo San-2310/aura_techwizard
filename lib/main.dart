@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:aura_techwizard/resources/user_provider.dart';
 import 'package:aura_techwizard/views/AnalysisScreens/CombinedAnalysisScreen.dart';
-import 'package:aura_techwizard/views/auth_screens/login.dart';
+import 'package:aura_techwizard/views/MainLayoutScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,6 +50,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -72,7 +74,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: const LoginScreen(),
+        home: MainLayoutScreen(),
       ),
     );
   }

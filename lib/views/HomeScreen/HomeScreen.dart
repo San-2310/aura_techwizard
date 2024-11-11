@@ -1,9 +1,60 @@
 import 'package:aura_techwizard/models/user.dart' as ModelUser;
 import 'package:aura_techwizard/resources/user_provider.dart';
-import 'package:aura_techwizard/views/community_screen/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+class CustomToggleSwitch extends StatelessWidget {
+  final bool isCalmMode;
+  final Function(bool) onToggle;
+
+  const CustomToggleSwitch({
+    Key? key,
+    required this.isCalmMode,
+    required this.onToggle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onToggle(!isCalmMode),
+      child: Container(
+        width: 70,
+        height: 35,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE6E6FA), // Light purple lilac color
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 200),
+              alignment:
+                  isCalmMode ? Alignment.centerLeft : Alignment.centerRight,
+              child: Container(
+                width: 35,
+                height: 35,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: Icon(
+                    isCalmMode
+                        ? Icons.spa // Lotus icon for calm mode
+                        : Icons.flash_on, // Thunder icon for energy mode
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,8 +64,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
   bool _isLoading = true;
+  bool _isCalmMode = false;
 
   // final List<Widget> _pages = [
   //   HomeScreen(),
@@ -43,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final ModelUser.User? user = Provider.of<UserProvider>(context).getUser;
@@ -64,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(user!.photoUrl,user!.fullname),
+              _buildHeader(user.photoUrl, user.fullname),
               const SizedBox(height: 20.0),
               _buildMoodIcons(),
               const SizedBox(height: 20.0),
@@ -77,31 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      //   //backgroundColor: Colors.black87,
-      //   selectedItemColor: const Color.fromRGBO(55, 27, 52, 1),
-      //   unselectedItemColor: const Color.fromRGBO(205, 208, 227, 1),
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.group),
-      //       label: 'Community',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings),
-      //       label: 'Settings',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
     );
   }
 

@@ -74,7 +74,7 @@ class ChatMethods {
     return await _firestore
         .collection('users')
         .where('username', isGreaterThanOrEqualTo: searchTerm)
-        .where('username', isLessThan: searchTerm + 'z')
+        .where('username', isLessThan: '${searchTerm}z')
         .get();
   }
 }

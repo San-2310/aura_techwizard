@@ -12,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   
 
   @override
@@ -210,12 +212,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   signUpUser();
                 },
                 child: Container(
-                  child: _isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ))
-                      : Text('Sign Up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -235,6 +231,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           end: Alignment.bottomRight
                           )
                           ),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ))
+                      : Text('Sign Up'),
                 ),
               ),
               const SizedBox(
@@ -260,19 +262,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text("Already have a account?"),
                     padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text("Already have a account?"),
                   ),
                   GestureDetector(
                     onTap: () {
                       navigateToLogin();
                     },
                     child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
                         "Login",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                   ),
                 ],

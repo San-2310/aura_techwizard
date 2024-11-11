@@ -7,7 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class CombinedAnalysisScreen extends StatelessWidget {
-  const CombinedAnalysisScreen({Key? key}) : super(key: key);
+  const CombinedAnalysisScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
