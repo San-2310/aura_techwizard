@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:aura_techwizard/components/consts.dart';
+import 'package:aura_techwizard/firebase_options.dart';
 import 'package:aura_techwizard/resources/user_provider.dart';
-import 'package:aura_techwizard/views/AnalysisScreens/CombinedAnalysisScreen.dart';
-import 'package:aura_techwizard/views/MainLayoutScreen.dart';
+import 'package:aura_techwizard/views/auth_screens/login.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +49,11 @@ Future<void> initializeNotifications() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeNotifications(); // Request notification permission here
-  runApp(MyApp());
+  Gemini.init(apiKey: gemini_api_key);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -59,12 +66,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => AppUsageProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => TextAnalysisProvider(),
-        )
+        // ChangeNotifierProvider(
+        //   create: (_) => AppUsageProvider(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => TextAnalysisProvider(),
+        // )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -74,7 +81,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: MainLayoutScreen(),
+        home: LoginScreen(),
       ),
     );
   }

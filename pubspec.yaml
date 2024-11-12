@@ -51,6 +51,22 @@ dependencies:
   http: ^1.2.2
   geocoding: ^3.0.0
   lottie: ^3.1.3
+  get: ^4.6.6
+  tflite_flutter: ^0.11.0
+  path_provider: ^2.1.5
+  record: ^5.2.0
+  speech_to_text: ^7.0.0
+  video_player: ^2.9.2
+  chewie: ^1.8.5
+  appinio_video_player: ^1.2.2
+  flutter_gemini: ^2.0.3
+  dash_chat_2: ^0.0.21
+  connectivity_plus: ^6.1.0
+  file_picker: ^8.1.3
+  flutter_colorpicker: ^1.1.0
+  url_launcher: ^6.3.1
+  latlong2: ^0.9.1
+  pedometer: ^4.0.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +93,11 @@ flutter:
   assets:
     - assets/icons/
     - assets/weather_animation/
+    - assets/videos/
+    - assets/images/
+    - assets/toxicity1.tflite
+    - assets/vocabulary.json
+    - assets/game1_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

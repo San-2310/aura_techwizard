@@ -144,6 +144,14 @@ class _HomeScreenState extends State<HomeScreen> {
               AssetImage("assets/icons/menu.png"),
               size: 24.0,
             ),
+            CustomToggleSwitch(
+              isCalmMode: _isCalmMode,
+              onToggle: (value) {
+                setState(() {
+                  _isCalmMode = value;
+                });
+              },
+            ),
             Row(
               children: [
                 CircleAvatar(
