@@ -1,20 +1,17 @@
-import 'package:aura_techwizard/views/MainLayoutScreen.dart';
-import 'package:aura_techwizard/views/auth_screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/route_manager.dart';
 
 class Splashscreen extends StatefulWidget {
-  Splashscreen({super.key});
+  const Splashscreen({super.key});
 
   @override
   State<Splashscreen> createState() => _SplashscreenState();
 }
 
-class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderStateMixin{
-  double _logoOpacity = 0.0;
-  double _animationOpacity = 0.0;
+class _SplashscreenState extends State<Splashscreen>
+    with SingleTickerProviderStateMixin {
+  final double _logoOpacity = 0.0;
+  final double _animationOpacity = 0.0;
   final auth = FirebaseAuth.instance;
 
   // @override
@@ -61,9 +58,7 @@ class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderSt
       appBar: AppBar(
         title: Text('SplashScreen'),
       ),
-      body: Center(
-        
-      ),
+      body: Center(),
     );
   }
 }

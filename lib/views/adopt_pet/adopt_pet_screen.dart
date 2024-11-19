@@ -30,7 +30,7 @@ import 'package:aura_techwizard/views/adopt_pet/chatbot_screen.dart';
 import 'package:flutter/material.dart';
 
 class PetAdoptionScreen extends StatefulWidget {
-  const PetAdoptionScreen({Key? key}) : super(key: key);
+  const PetAdoptionScreen({super.key});
 
   @override
   _PetAdoptionScreenState createState() => _PetAdoptionScreenState();
@@ -67,10 +67,12 @@ class _PetAdoptionScreenState extends State<PetAdoptionScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: Colors.black),
+        //   onPressed: () {
+
+        //   },
+        // ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.black),
@@ -118,9 +120,6 @@ class _PetAdoptionScreenState extends State<PetAdoptionScreen> {
                           const SizedBox(height: 50),
                           ElevatedButton(
                             onPressed: () {},
-                            child: const Text(
-                              'Continue',
-                            ),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(19),
@@ -128,8 +127,11 @@ class _PetAdoptionScreenState extends State<PetAdoptionScreen> {
                               backgroundColor: Colors.transparent,
                             ).copyWith(
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              elevation: MaterialStateProperty.all(0),
+                                  WidgetStateProperty.all(Colors.transparent),
+                              elevation: WidgetStateProperty.all(0),
+                            ),
+                            child: const Text(
+                              'Continue',
                             ),
                           ).buildGradient(),
                         ],
@@ -269,12 +271,11 @@ class _PetAdoptionScreenState extends State<PetAdoptionScreen> {
                       const Text('Ask Our Weatherbot'),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        child: const Text(
-                          'Chat',
-                          style: TextStyle(color: Colors.black),
-                        ),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatbotScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatbotScreen()));
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -283,8 +284,12 @@ class _PetAdoptionScreenState extends State<PetAdoptionScreen> {
                           backgroundColor: Colors.transparent,
                         ).copyWith(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          elevation: MaterialStateProperty.all(0),
+                              WidgetStateProperty.all(Colors.transparent),
+                          elevation: WidgetStateProperty.all(0),
+                        ),
+                        child: const Text(
+                          'Chat',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ).buildGradient(),
                     ],
@@ -304,10 +309,10 @@ class PetCard extends StatelessWidget {
   final String imagePath;
 
   const PetCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.imagePath,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -331,11 +336,11 @@ class CategoryButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const CategoryButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -367,10 +372,10 @@ class AllPetsPage extends StatelessWidget {
   final List<Map<String, String>> pets;
 
   const AllPetsPage({
-    Key? key,
+    super.key,
     required this.category,
     required this.pets,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,10 @@
+import 'package:aura_techwizard/views/games/pattern.dart';
 import 'package:aura_techwizard/views/games/pattern_generator.dart';
 import 'package:aura_techwizard/views/games/pattern_grid.dart';
 import 'package:flutter/material.dart';
-import 'package:aura_techwizard/views/games/pattern.dart';
+
 class PatternGameScreen extends StatefulWidget {
-  const PatternGameScreen({Key? key}) : super(key: key);
+  const PatternGameScreen({super.key});
 
   @override
   State<PatternGameScreen> createState() => _PatternGameScreenState();
@@ -75,7 +76,7 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
                       children: [
                         Text(
                           'Level $level',
-                         // style: Theme.of(context).textTheme.headline5,
+                          // style: Theme.of(context).textTheme.headline5,
                         ),
                         const SizedBox(height: 16),
                         Expanded(
@@ -84,7 +85,7 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
                             children: [
                               Text(
                                 'Match this pattern:',
-                              //  style: Theme.of(context).textTheme.subtitle1,
+                                //  style: Theme.of(context).textTheme.subtitle1,
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -94,7 +95,7 @@ class _PatternGameScreenState extends State<PatternGameScreen> {
                               const SizedBox(height: 24),
                               Text(
                                 'Your pattern:',
-                               // style: Theme.of(context).textTheme.subtitle1,
+                                // style: Theme.of(context).textTheme.subtitle1,
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
