@@ -1,9 +1,7 @@
 import 'package:aura_techwizard/components/colors.dart';
 import 'package:aura_techwizard/components/text_field_input.dart';
-import 'package:aura_techwizard/components/utils.dart';
 import 'package:aura_techwizard/resources/auth_methods.dart';
 import 'package:aura_techwizard/resources/user_provider.dart';
-import 'package:aura_techwizard/views/HomeScreen/HomeScreen.dart';
 import 'package:aura_techwizard/views/MainLayoutScreen.dart';
 import 'package:aura_techwizard/views/auth_screens/signin.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    
+
     String res = await AuthMethods().loginUser(
       email: _emailController.text,
       password: _passwordController.text,
@@ -62,8 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == "success") {
       // Get UserProvider
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-      
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+
       // Refresh user data after successful login
       await userProvider.refreshUser();
 
@@ -100,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
         body: SingleChildScrollView(
-          child: SafeArea(
-                child: Container(
+      child: SafeArea(
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
@@ -132,8 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const Text(
                         "Email",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       TextFieldInput(
                           hintText: 'Enter your email',
@@ -148,8 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       //password input
                       const Text(
                         "Password",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       TextFieldInput(
                         hintText: 'Enter your password',
@@ -170,50 +169,51 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(colors: [
-                              AppColors.darkGreen,
-                              AppColors.lightGreen,
-                              AppColors.mediumGreen,
-                              AppColors.mediumGreen,
-                              AppColors.mediumGreen,
-                              AppColors.mediumGreen,
-                              AppColors.paleGreen,
-                              AppColors.paleGreen
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight
-                            )
-                            ),
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(
+                                    colors: [
+                                      AppColors.darkGreen,
+                                      AppColors.lightGreen,
+                                      AppColors.mediumGreen,
+                                      AppColors.mediumGreen,
+                                      AppColors.mediumGreen,
+                                      AppColors.mediumGreen,
+                                      AppColors.paleGreen,
+                                      AppColors.paleGreen
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight)),
                             child: _isLoading
                                 ? const CircularProgressIndicator(
                                     color: Colors.black,
-
                                   )
                                 : const Text('Log In')),
                       ),
                       const SizedBox(
-                height: 24,
-              ),
+                        height: 24,
+                      ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("OR",style: TextStyle(
-                    fontSize: 25
-                  ),)
+                  Text(
+                    "OR",
+                    style: TextStyle(fontSize: 25),
+                  )
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              
+
               // Obx(
               //   () => isLoading.value
               //       ? CircularProgressIndicator()
@@ -250,9 +250,8 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ],
           ),
-                ),
-              ),
-        ));
+        ),
+      ),
+    ));
   }
 }
-

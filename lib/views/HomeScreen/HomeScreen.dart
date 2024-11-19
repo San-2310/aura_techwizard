@@ -14,10 +14,10 @@ class CustomToggleSwitch extends StatelessWidget {
   final Function(bool) onToggle;
 
   const CustomToggleSwitch({
-    Key? key,
+    super.key,
     required this.isCalmMode,
     required this.onToggle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

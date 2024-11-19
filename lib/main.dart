@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aura_techwizard/components/consts.dart';
 import 'package:aura_techwizard/firebase_options.dart';
 import 'package:aura_techwizard/resources/user_provider.dart';
+import 'package:aura_techwizard/views/analysis_screens/analysis_screen.dart';
 import 'package:aura_techwizard/views/auth_screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -66,12 +67,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => AppUsageProvider(),
-        // ),
-        // ChangeNotifierProvider(
-        //   create: (_) => TextAnalysisProvider(),
-        // )
+        ChangeNotifierProvider(
+          create: (_) => AppUsageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TextAnalysisProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

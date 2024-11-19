@@ -18,7 +18,9 @@ final List<MapEntry<DateTime, int>> dailySteps = [
 ];
 
 class LifestlyeScreen extends StatelessWidget {
-  const LifestlyeScreen({super.key, });
+  const LifestlyeScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,8 @@ class LifestlyeScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20.0),
               child: Container(
                 height: media.width * 0.5,
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -114,14 +117,13 @@ class LifestlyeScreen extends StatelessWidget {
                 child: MyBarGraph(
                   dailySteps: dailySteps,
                 ),
-        
               ),
             ),
             LifestyleTrackingSection(
               weight: user!.weight, // Pass from user data
-              age: user!.age, // Pass from user data
+              age: user.age, // Pass from user data
               //bedTime: user!.bedTime, // Pass from user data
-              bedTime: _stringToTimeOfDay(user!.bedTime),
+              bedTime: _stringToTimeOfDay(user.bedTime),
             ),
           ],
         ),
@@ -135,7 +137,6 @@ TimeOfDay _stringToTimeOfDay(String time) {
   final dateTime = format.parse(time);
   return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
 }
-
 
 enum RoundButtonType { primaryBG, secondaryBG }
 

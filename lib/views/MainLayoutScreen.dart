@@ -1,5 +1,4 @@
 import 'package:aura_techwizard/views/HomeScreen/HomeScreen.dart';
-import 'package:aura_techwizard/views/community_screen/community_screen.dart';
 import 'package:aura_techwizard/views/community_screen/feed_screen.dart';
 import 'package:aura_techwizard/views/lifestyle/lifestlye_screen.dart';
 import 'package:aura_techwizard/views/user_profile.dart';
@@ -61,5 +60,3 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     );
   }
 }
-
-
