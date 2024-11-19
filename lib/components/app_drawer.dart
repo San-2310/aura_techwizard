@@ -1,5 +1,3 @@
-
-import 'package:aura_techwizard/components/colors.dart';
 import 'package:aura_techwizard/models/user.dart';
 import 'package:aura_techwizard/resources/user_provider.dart';
 import 'package:aura_techwizard/views/HomeScreen/HomeScreen.dart';
@@ -24,65 +22,85 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(gradient: LinearGradient(
-                              
-                            colors: [
-        Color.fromRGBO(174, 175, 247, 1), // Soft pink
-       // Color.fromRGBO(253, 221, 236, 1), // Light peach
-        Color(0xFFC5DEE3), // Pale blue
-      ],)),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(174, 175, 247, 1), // Soft pink
+                // Color.fromRGBO(253, 221, 236, 1), // Light peach
+                Color(0xFFC5DEE3), // Pale blue
+              ],
+            )),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Aura", style: TextStyle(fontSize: 50, color: Colors.black,fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
+                Text(
+                  "Aura",
+                  style: TextStyle(
+                      fontSize: 50,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Home', Icons.home, HomeScreen(), '/home'),
+            child: _buildDrawerItem(
+                context, 'Home', Icons.home, HomeScreen(), '/home'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Adopt Pet', Icons.pets, PetAdoptionScreen(), '/adopt_pet'),
+            child: _buildDrawerItem(context, 'Adopt Pet', Icons.pets,
+                PetAdoptionScreen(), '/adopt_pet'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Lab Report Analysis', Icons.receipt, SummarizerScreen(), '/summarizer'),
+            child: _buildDrawerItem(context, 'Lab Report Analysis',
+                Icons.receipt, SummarizerScreen(), '/summarizer'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Diet Plan Generator', Icons.restaurant, DietPlanScreen(), '/diet_plan'),
+            child: _buildDrawerItem(context, 'Diet Plan Generator',
+                Icons.restaurant, DietPlanScreen(), '/diet_plan'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Usage Analyser', Icons.auto_graph, CombinedAnalysisScreen(), '/combined_analysis'),
+            child: _buildDrawerItem(context, 'Usage Analyser', Icons.auto_graph,
+                CombinedAnalysisScreen(), '/combined_analysis'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _buildDrawerItem(context, 'Therapist Near Me', Icons.medical_services_outlined, TherapistScreen(userUid: user!.uid,), '/therapist'),
+            child: _buildDrawerItem(
+                context,
+                'Therapist Near Me',
+                Icons.medical_services_outlined,
+                TherapistScreen(
+                  userUid: user!.uid,
+                ),
+                '/therapist'),
           ),
-          
         ],
       ),
     );
   }
 
- ListTile _buildDrawerItem(BuildContext context, String title, IconData icon, Widget destination, String route) {
-  return ListTile(
-    title: Text(title),
-    leading: Icon(icon),
-    selected: currentRoute == route,
-    selectedTileColor: Color.fromRGBO(253, 221, 236, 1),
-    onTap: () {
-      if (currentRoute != route) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => destination));
-      } else {
-        Navigator.pop(context);
-      }
-    },
-  );
+  ListTile _buildDrawerItem(BuildContext context, String title, IconData icon,
+      Widget destination, String route) {
+    return ListTile(
+      title: Text(title),
+      leading: Icon(icon),
+      selected: currentRoute == route,
+      selectedTileColor: Color.fromRGBO(253, 221, 236, 1),
+      onTap: () {
+        if (currentRoute != route) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => destination));
+        } else {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
 }
-
- }

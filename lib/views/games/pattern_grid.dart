@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'pattern.dart';
 
 class PatternGrid extends StatelessWidget {
@@ -7,11 +8,11 @@ class PatternGrid extends StatelessWidget {
   final Function(int, int)? onTileTap;
 
   const PatternGrid({
-    Key? key,
+    super.key,
     required this.pattern,
     this.isInteractive = false,
     this.onTileTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,7 @@ class PatternGrid extends StatelessWidget {
             final col = index % pattern.size;
             return PatternTile(
               isActive: pattern.grid[row][col],
-              onTap: isInteractive
-                  ? () => onTileTap?.call(row, col)
-                  : null,
+              onTap: isInteractive ? () => onTileTap?.call(row, col) : null,
             );
           },
         ),
@@ -53,10 +52,10 @@ class PatternTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   const PatternTile({
-    Key? key,
+    super.key,
     required this.isActive,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

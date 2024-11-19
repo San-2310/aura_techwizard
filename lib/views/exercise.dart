@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Exercise {
   final String name;
   final String description;

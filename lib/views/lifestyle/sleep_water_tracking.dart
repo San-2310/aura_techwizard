@@ -11,11 +11,11 @@ class LifestyleTrackingSection extends StatefulWidget {
   final TimeOfDay bedTime;
 
   const LifestyleTrackingSection({
-    Key? key,
+    super.key,
     required this.weight,
     required this.age,
     required this.bedTime,
-  }) : super(key: key);
+  });
 
   @override
   State<LifestyleTrackingSection> createState() =>

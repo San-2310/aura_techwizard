@@ -103,13 +103,14 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 class VoiceInputWidget extends StatefulWidget {
   final Function(String) onTextRecognized;
 
-  const VoiceInputWidget({Key? key, required this.onTextRecognized}) : super(key: key);
+  const VoiceInputWidget({super.key, required this.onTextRecognized});
 
   @override
   _VoiceInputWidgetState createState() => _VoiceInputWidgetState();
 }
 
-class _VoiceInputWidgetState extends State<VoiceInputWidget> with SingleTickerProviderStateMixin {
+class _VoiceInputWidgetState extends State<VoiceInputWidget>
+    with SingleTickerProviderStateMixin {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isInitialized = false;
   bool _isListening = false;
@@ -223,15 +224,15 @@ class _VoiceInputWidgetState extends State<VoiceInputWidget> with SingleTickerPr
           animation: _pulseController,
           builder: (context, child) {
             return Transform.scale(
-              scale: _isListening 
-                ? 1.0 + (_pulseController.value * 0.2)
-                : 1.0,
+              scale: _isListening ? 1.0 + (_pulseController.value * 0.2) : 1.0,
               child: FloatingActionButton.extended(
                 onPressed: _isInitialized ? _toggleListening : null,
                 icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
                 label: Text(_isListening ? 'Stop' : 'Start'),
                 backgroundColor: _isInitialized
-                    ? (_isListening ? Colors.red : Theme.of(context).primaryColor)
+                    ? (_isListening
+                        ? Colors.red
+                        : Theme.of(context).primaryColor)
                     : Colors.grey,
               ),
             );

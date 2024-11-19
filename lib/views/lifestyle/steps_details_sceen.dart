@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 class StepsDetailsScreen extends StatefulWidget {
   static const routeName = '/steps-details';
 
-  const StepsDetailsScreen({Key? key}) : super(key: key);
+  const StepsDetailsScreen({super.key});
 
   @override
   State<StepsDetailsScreen> createState() => _StepsDetailsScreenState();
@@ -21,7 +21,7 @@ class _StepsDetailsScreenState extends State<StepsDetailsScreen> {
   String _steps = '0';
   bool _isLoading = true;
   String _error = '';
-  List<Activity> _activities = [];
+  final List<Activity> _activities = [];
 
   @override
   void initState() {
@@ -54,8 +54,8 @@ class _StepsDetailsScreenState extends State<StepsDetailsScreen> {
         return;
       }
 
-      _pedestrianStatusStream = await Pedometer.pedestrianStatusStream;
-      _stepCountStream = await Pedometer.stepCountStream;
+      _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+      _stepCountStream = Pedometer.stepCountStream;
 
       _pedestrianStatusStream
           .listen(onPedestrianStatusChanged)
@@ -357,7 +357,7 @@ class Activity {
 class ActivityCard extends StatelessWidget {
   final Activity activity;
 
-  const ActivityCard({Key? key, required this.activity}) : super(key: key);
+  const ActivityCard({super.key, required this.activity});
 
   @override
   Widget build(BuildContext context) {

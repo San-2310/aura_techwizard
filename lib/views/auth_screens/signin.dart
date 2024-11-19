@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -329,14 +331,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 InkWell(
                   onTap: signUpUser,
                   child: Container(
-                    child: !_isLoading
-                        ? const Text(
-                            'Sign up',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        : const CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
                     width: double.infinity,
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -346,6 +340,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       color: Colors.blue,
                     ),
+                    child: !_isLoading
+                        ? const Text(
+                            'Sign up',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        : const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                   ),
                 ),
                 const SizedBox(height: 12),

@@ -11,7 +11,7 @@
 //   static Map<String, int>? _vocabMap;
 //   static const int maxLength = 512;
 //   static const int vocabSize = 30522;  // Standard BERT vocab size
-  
+
 //   static const List<String> _specialTokens = [
 //     '[PAD]', '[UNK]', '[CLS]', '[SEP]', '[MASK]'
 //   ];
@@ -22,7 +22,7 @@
 //       // Load model
 //       final interpreterOptions = InterpreterOptions()
 //         ..threads = 4;
-      
+
 //       _interpreter = await Interpreter.fromAsset(
 //         'assets/model/biobert_model.tflite',
 //         options: interpreterOptions,
@@ -31,7 +31,7 @@
 //       // Load vocabulary
 //       final String vocabString = await rootBundle.loadString('assets/vocab.txt');
 //       _vocabMap = {};
-      
+
 //       final List<String> vocabLines = vocabString.split('\n');
 //       for (int i = 0; i < vocabLines.length; i++) {
 //         final String token = vocabLines[i].trim();
@@ -53,7 +53,7 @@
 
 //     final List<int> inputIds = [];
 //     final List<int> attentionMask = [];
-    
+
 //     // Add [CLS] token at start
 //     inputIds.add(_vocabMap!['[CLS]']!);
 //     attentionMask.add(1);
@@ -237,22 +237,24 @@
 //   }
 // }
 
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:aura_techwizard/components/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
-import 'dart:convert';
 
 class SummarizerScreen extends StatefulWidget {
+  const SummarizerScreen({super.key});
+
   @override
   _SummarizerScreenState createState() => _SummarizerScreenState();
 }
 
 class _SummarizerScreenState extends State<SummarizerScreen> {
-  int _selectedIndex = 2; // Set to 2 for the home icon
+  final int _selectedIndex = 2; // Set to 2 for the home icon
   File? _file;
   String _summary = '';
   bool _isLoading = false;
@@ -278,23 +280,24 @@ class _SummarizerScreenState extends State<SummarizerScreen> {
     });
 
     try {
-      final String ngrokKey = 'https://c9e0-2402-3a80-4281-c0de-64ba-cb0e-9fc6-f264.ngrok-free.app';
-      final url = Uri.parse(ngrokKey+'/analyze_medical_reports');
+      final String ngrokKey =
+          'https://c9e0-2402-3a80-4281-c0de-64ba-cb0e-9fc6-f264.ngrok-free.app';
+      final url = Uri.parse('$ngrokKey/analyze_medical_reports');
 
       var request = http.MultipartRequest('POST', url);
       // Add the file to the request
-    request.files.add(await http.MultipartFile.fromPath(
-      'files',
-      _file!.path,
-      filename: path.basename(_file!.path),
-    ));
+      request.files.add(await http.MultipartFile.fromPath(
+        'files',
+        _file!.path,
+        filename: path.basename(_file!.path),
+      ));
 
-    // Add headers
-    var headers = {
-      "Content-Type": "multipart/form-data",
-      // Add other headers if necessary
-    };
-    request.headers.addAll(headers);
+      // Add headers
+      var headers = {
+        "Content-Type": "multipart/form-data",
+        // Add other headers if necessary
+      };
+      request.headers.addAll(headers);
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -324,9 +327,7 @@ class _SummarizerScreenState extends State<SummarizerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reports'),
-        actions: [
-          
-        ],
+        actions: [],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

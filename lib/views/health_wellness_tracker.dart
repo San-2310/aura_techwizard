@@ -464,7 +464,6 @@
 // //   }
 // // }
 
-
 // health_wellness_tracker.dart
 
 // import 'package:flutter/material.dart';
@@ -935,14 +934,12 @@
 //   }
 // }
 
-
-
 // import 'package:flutter/material.dart';
 // import 'package:video_player/video_player.dart';
 
+import 'package:appinio_video_player/appinio_video_player.dart';
 // Models
 import 'package:flutter/material.dart';
-import 'package:appinio_video_player/appinio_video_player.dart';
 
 class Exercise {
   final String name;
@@ -967,11 +964,15 @@ class Exercise {
 }
 
 class HealthWellnessTrackerScreen extends StatefulWidget {
+  const HealthWellnessTrackerScreen({super.key});
+
   @override
-  _HealthWellnessTrackerScreenState createState() => _HealthWellnessTrackerScreenState();
+  _HealthWellnessTrackerScreenState createState() =>
+      _HealthWellnessTrackerScreenState();
 }
 
-class _HealthWellnessTrackerScreenState extends State<HealthWellnessTrackerScreen> {
+class _HealthWellnessTrackerScreenState
+    extends State<HealthWellnessTrackerScreen> {
   String selectedAgeGroup = 'all';
   String selectedDifficulty = 'all';
   String selectedCategory = 'all';
@@ -1011,9 +1012,12 @@ class _HealthWellnessTrackerScreenState extends State<HealthWellnessTrackerScree
 
   List<Exercise> getFilteredExercises() {
     return exercises.where((exercise) {
-      bool ageMatch = selectedAgeGroup == 'all' || exercise.ageGroups.contains(selectedAgeGroup);
-      bool difficultyMatch = selectedDifficulty == 'all' || exercise.difficulty == selectedDifficulty;
-      bool categoryMatch = selectedCategory == 'all' || exercise.category == selectedCategory;
+      bool ageMatch = selectedAgeGroup == 'all' ||
+          exercise.ageGroups.contains(selectedAgeGroup);
+      bool difficultyMatch = selectedDifficulty == 'all' ||
+          exercise.difficulty == selectedDifficulty;
+      bool categoryMatch =
+          selectedCategory == 'all' || exercise.category == selectedCategory;
       return ageMatch && difficultyMatch && categoryMatch;
     }).toList();
   }
@@ -1021,9 +1025,11 @@ class _HealthWellnessTrackerScreenState extends State<HealthWellnessTrackerScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFCEFF4), // Light pink background from the image
+      backgroundColor:
+          Color(0xFFFCEFF4), // Light pink background from the image
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 191, 121, 234), // Purple from the image
+        backgroundColor:
+            Color.fromARGB(255, 191, 121, 234), // Purple from the image
         title: Text('Exercise Library', style: TextStyle(color: Colors.white)),
         elevation: 0,
       ),
@@ -1135,7 +1141,8 @@ class _HealthWellnessTrackerScreenState extends State<HealthWellnessTrackerScree
         return Card(
           elevation: 4,
           margin: EdgeInsets.only(bottom: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: ListTile(
             contentPadding: EdgeInsets.all(16),
             leading: Container(
@@ -1201,12 +1208,10 @@ class _HealthWellnessTrackerScreenState extends State<HealthWellnessTrackerScree
   }
 }
 
-
-
 class ExerciseVideoScreen extends StatefulWidget {
   final Exercise exercise;
 
-  ExerciseVideoScreen({required this.exercise});
+  const ExerciseVideoScreen({super.key, required this.exercise});
 
   @override
   _ExerciseVideoScreenState createState() => _ExerciseVideoScreenState();
@@ -1225,12 +1230,13 @@ class _ExerciseVideoScreenState extends State<ExerciseVideoScreen> {
 
   void _initializeVideoPlayer() async {
     try {
-      _videoPlayerController = VideoPlayerController.asset(widget.exercise.videoUrl)
-        ..initialize().then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-        });
+      _videoPlayerController =
+          VideoPlayerController.asset(widget.exercise.videoUrl)
+            ..initialize().then((_) {
+              setState(() {
+                _isLoading = false;
+              });
+            });
 
       _customVideoPlayerController = CustomVideoPlayerController(
         context: context,

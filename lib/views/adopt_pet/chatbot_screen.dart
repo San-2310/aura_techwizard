@@ -1,7 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -16,7 +16,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   ChatUser currentUser = ChatUser(id: "0", firstName: "User");
   ChatUser geminiUser = ChatUser(id: "1", firstName: "Gemini");
 
-  Map<String, String> _userResponses = {};
+  final Map<String, String> _userResponses = {};
   int _currentQuestionIndex = 0;
   bool _isLoading = false;
   bool _questionnaireCompleted = false;
@@ -25,7 +25,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final List<Map<String, dynamic>> _questions = [
     {
       'question': 'What is the temperature in your region?',
-      'options': ['Cool (0-10°C)', 'Mild (10-20°C)', 'Warm (20-30°C)', 'Hot (30°C+)'],
+      'options': [
+        'Cool (0-10°C)',
+        'Mild (10-20°C)',
+        'Warm (20-30°C)',
+        'Hot (30°C+)'
+      ],
     },
     {
       'question': 'What is the humidity level in your region?',
@@ -33,11 +38,20 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     },
     {
       'question': 'What is the size of your house?',
-      'options': ['Small (<50m²)', 'Medium (50-200m²)', 'Large (200-600m²)', 'Very Large (600m²+)'],
+      'options': [
+        'Small (<50m²)',
+        'Medium (50-200m²)',
+        'Large (200-600m²)',
+        'Very Large (600m²+)'
+      ],
     },
     {
       'question': 'What is your budget for pet maintenance?',
-      'options': ['Low (Rs.0-Rs.1000/month)', 'Medium (Rs.1000-Rs.3000/month)', 'High (Rs.3000/month)'],
+      'options': [
+        'Low (Rs.0-Rs.1000/month)',
+        'Medium (Rs.1000-Rs.3000/month)',
+        'High (Rs.3000/month)'
+      ],
     },
   ];
 
@@ -50,7 +64,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     });
   }
 
-    Future<void> _checkConnectivity() async {
+  Future<void> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     _updateConnectivityStatus(connectivityResult);
     Connectivity().onConnectivityChanged.listen(_updateConnectivityStatus);
@@ -65,7 +79,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     if (_isOnline) {
       _retryFailedRequests();
     } else {
-      _showNetworkStatusMessage("No internet connection. Please check your network.");
+      _showNetworkStatusMessage(
+          "No internet connection. Please check your network.");
     }
   }
 
@@ -86,7 +101,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   Widget _buildUI() {
     if (!_isOnline) {
-      return Center(child: Text("No internet connection. Please check your network."));
+      return Center(
+          child: Text("No internet connection. Please check your network."));
     }
     return Column(
       children: [
@@ -98,7 +114,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               messageOptions: MessageOptions(
                 showTime: false,
                 messageTextBuilder: (message, previousMessage, nextMessage) {
-                  Color textColor = message.user == currentUser ? Colors.white : Colors.black;
+                  Color textColor =
+                      message.user == currentUser ? Colors.white : Colors.black;
                   return Text.rich(
                     TextSpan(
                       children: _parseText(message.text, textColor),
@@ -136,7 +153,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     if (_currentQuestionIndex >= _questions.length) {
       return Container();
     }
-    
+
     Map<String, dynamic> currentQuestion = _questions[_currentQuestionIndex];
     return Container(
       padding: EdgeInsets.all(16),
@@ -185,13 +202,16 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     Provide a concise answer and do not provide any tables of comparison and images just stick to the data.
     ''';
 
-    String visiblePrompt = "My Preferences:\nTemperature: ${_getTemperature()}\nHumidity: ${_getHumidity()}\nSize of House: ${_getHouseSize()}\nBudget: ${_getBudget()}";
+    String visiblePrompt =
+        "My Preferences:\nTemperature: ${_getTemperature()}\nHumidity: ${_getHumidity()}\nSize of House: ${_getHouseSize()}\nBudget: ${_getBudget()}";
 
-    _sendMessage(ChatMessage(
-      text: visiblePrompt,
-      user: currentUser,
-      createdAt: DateTime.now(),
-    ), fullPrompt);
+    _sendMessage(
+        ChatMessage(
+          text: visiblePrompt,
+          user: currentUser,
+          createdAt: DateTime.now(),
+        ),
+        fullPrompt);
   }
 
   String _getTemperature() => _userResponses[_questions[0]['question']] ?? '';
@@ -226,12 +246,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 
   void _sendMessage(ChatMessage chatMessage, [String? fullPrompt]) {
-     if (!_isOnline) {
-      _showNetworkStatusMessage("No internet connection. Your message will be sent when online.");
+    if (!_isOnline) {
+      _showNetworkStatusMessage(
+          "No internet connection. Your message will be sent when online.");
       _showErrorMessage("No internet connection. Please check your network.");
       return;
     }
-    
+
     setState(() {
       messages = [chatMessage, ...messages];
     });
@@ -272,7 +293,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         _isLoading = false;
       });
     }
-    }
+  }
 
   // void _showErrorMessage(String message) {
   //   setState(() {
@@ -311,6 +332,4 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       return '<b>${match.group(1)}</b>';
     });
   }
-
-
 }

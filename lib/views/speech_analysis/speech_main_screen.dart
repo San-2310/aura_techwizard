@@ -100,7 +100,7 @@ import 'package:flutter/material.dart';
 // }
 
 class SpeechMainScreen extends StatefulWidget {
-  const SpeechMainScreen({Key? key}) : super(key: key);
+  const SpeechMainScreen({super.key});
 
   @override
   _SpeechMainScreenState createState() => _SpeechMainScreenState();

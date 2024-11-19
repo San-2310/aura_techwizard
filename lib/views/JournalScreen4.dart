@@ -1,16 +1,13 @@
 import 'dart:io';
-import 'package:aura_techwizard/views/speech_analysis/voice_input_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:flutter_gemini/flutter_gemini.dart';
 //import "package:image_picker/image_picker.dart";
-
-
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -21,7 +18,8 @@ class DiaryScreen extends StatefulWidget {
 
 class _DiaryScreenState extends State<DiaryScreen> {
   final TextEditingController _thoughtsController = TextEditingController();
-  final TextEditingController _textController = TextEditingController(); // Add this
+  final TextEditingController _textController =
+      TextEditingController(); // Add this
   final List<String> messages = []; // Add this
   final List<MoodboardItem> _moodboardImages = [];
   final List<JournalEntry> _journalEntries = [];
@@ -31,15 +29,13 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   final Gemini gemini = Gemini.instance;
   String _lastAnalyzedMood = '';
-  
+
   final List<String> _availableFonts = [
     'Roboto',
     'Lato',
     'OpenSans',
     'Montserrat',
   ];
-
-  
 
   @override
   void initState() {
@@ -54,7 +50,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       _selectedFont = prefs.getString('selectedFont') ?? 'Roboto';
       _fontSize = prefs.getDouble('fontSize') ?? 16.0;
       _textColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
-      
+
       // Load moodboard items
       final moodboardData = prefs.getStringList('moodboard') ?? [];
       _moodboardImages.clear();
@@ -87,15 +83,18 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   Future<String> _analyzeMood(String text) async {
     try {
-      final prompt = 'Analyze the mood of the user in 1 word from happy, sad, calm, content, angry, anxious, without any tables or graphics, if this is the text they are writing: $text';
+      final prompt =
+          'Analyze the mood of the user in 1 word from happy, sad, calm, content, angry, anxious, without any tables or graphics, if this is the text they are writing: $text';
       String mood = '';
-      
+
       await for (var event in gemini.streamGenerateContent(prompt)) {
-        final response = event.content?.parts?.map((part) => part.text).join(" ") ?? "neutral";
+        final response =
+            event.content?.parts?.map((part) => part.text).join(" ") ??
+                "neutral";
         mood = response.trim().toLowerCase();
         print("Gemini Mood Analysis: $mood");
       }
-      
+
       return mood;
     } catch (e) {
       print("Error analyzing mood: $e");
@@ -103,10 +102,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
     }
   }
 
-void _saveData() async {
+  void _saveData() async {
     // Analyze mood before saving
     _lastAnalyzedMood = await _analyzeMood(_thoughtsController.text);
-    
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('thoughts', _thoughtsController.text);
     await prefs.setString('selectedFont', _selectedFont);
@@ -121,7 +120,7 @@ void _saveData() async {
 
     // Save journal entries
     final journalData = _journalEntries
-        .map((entry) => 
+        .map((entry) =>
             '${entry.title}|||${entry.content}|||${entry.dateTime.toIso8601String()}|||${entry.mood}')
         .toList();
     await prefs.setStringList('journal', journalData);
@@ -134,70 +133,70 @@ void _saveData() async {
     // );
   }
 
- void _showTextCustomization() {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Customize Text'),
-      content: StatefulBuilder(
-        builder: (context, setState) => SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButton<String>(
-                value: _selectedFont,
-                items: _availableFonts.map((font) {
-                  return DropdownMenuItem(
-                    value: font,
-                    child: Text(font),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() => _selectedFont = value!);
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text('Font Size'),
-              Slider(
-                value: _fontSize,
-                min: 12,
-                max: 24,
-                divisions: 12,
-                label: _fontSize.round().toString(),
-                onChanged: (value) {
-                  setState(() => _fontSize = value);
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text('Text Color'),
-              const SizedBox(height: 8),
-              SimpleColorPicker(
-                selectedColor: _textColor,
-                onColorChanged: (color) {
-                  setState(() => _textColor = color);
-                },
-              ),
-            ],
+  void _showTextCustomization() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Customize Text'),
+        content: StatefulBuilder(
+          builder: (context, setState) => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DropdownButton<String>(
+                  value: _selectedFont,
+                  items: _availableFonts.map((font) {
+                    return DropdownMenuItem(
+                      value: font,
+                      child: Text(font),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() => _selectedFont = value!);
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('Font Size'),
+                Slider(
+                  value: _fontSize,
+                  min: 12,
+                  max: 24,
+                  divisions: 12,
+                  label: _fontSize.round().toString(),
+                  onChanged: (value) {
+                    setState(() => _fontSize = value);
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('Text Color'),
+                const SizedBox(height: 8),
+                SimpleColorPicker(
+                  selectedColor: _textColor,
+                  onColorChanged: (color) {
+                    setState(() => _textColor = color);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {});
+              Navigator.pop(context);
+              _saveData();
+            },
+            child: const Text('Apply'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {});
-            Navigator.pop(context);
-            _saveData();
-          },
-          child: const Text('Apply'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 
   void showColorPicker(BuildContext context) {
     showDialog(
@@ -222,163 +221,169 @@ void _saveData() async {
     );
   }
 
- void _addToMoodboard() async {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Add to Moodboard'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: const Text('Choose from Gallery'),
-            onTap: () async {
-              Navigator.pop(context);
-              final ImagePicker picker = ImagePicker();
-              final XFile? image = await picker.pickImage(
-                source: ImageSource.gallery,
-                maxWidth: 800,
-                maxHeight: 800,
+  void _addToMoodboard() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add to Moodboard'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () async {
+                Navigator.pop(context);
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(
+                  source: ImageSource.gallery,
+                  maxWidth: 800,
+                  maxHeight: 800,
+                );
+
+                if (image != null) {
+                  _showMoodboardCaptionDialog(image.path, false);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.mood),
+              title: const Text('Choose Preset Mood'),
+              onTap: () {
+                Navigator.pop(context);
+                _showPresetMoodDialog();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPresetMoodDialog() {
+    final presetMoods = {
+      'Happy': Icons.sentiment_very_satisfied,
+      'Sad': Icons.sentiment_very_dissatisfied,
+      'Excited': Icons.celebration,
+      'Peaceful': Icons.spa,
+      'Energetic': Icons.flash_on,
+      'Tired': Icons.bedtime,
+      'Creative': Icons.palette,
+      'Focused': Icons.track_changes,
+    };
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Choose Mood'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            itemCount: presetMoods.length,
+            itemBuilder: (context, index) {
+              final entry = presetMoods.entries.elementAt(index);
+              return InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  _showMoodboardCaptionDialog(entry.key, true);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.pink.shade200),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(entry.value, color: Colors.pink.shade300),
+                      const SizedBox(height: 4),
+                      Text(
+                        entry.key,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
               );
-              
-              if (image != null) {
-                _showMoodboardCaptionDialog(image.path, false);
-              }
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.mood),
-            title: const Text('Choose Preset Mood'),
-            onTap: () {
+        ),
+      ),
+    );
+  }
+
+// Add this method to show caption dialog
+  void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
+    final captionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Caption'),
+        content: TextField(
+          controller: captionController,
+          decoration: const InputDecoration(
+            labelText: 'Caption',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _moodboardImages.add(MoodboardItem(
+                  imagePath: imagePath,
+                  caption: captionController.text,
+                  isAsset: isAsset,
+                ));
+              });
               Navigator.pop(context);
-              _showPresetMoodDialog();
+              _saveData();
             },
+            child: const Text('Add'),
           ),
         ],
       ),
-    ),
-  );
-}
-
-void _showPresetMoodDialog() {
-  final presetMoods = {
-    'Happy': Icons.sentiment_very_satisfied,
-    'Sad': Icons.sentiment_very_dissatisfied,
-    'Excited': Icons.celebration,
-    'Peaceful': Icons.spa,
-    'Energetic': Icons.flash_on,
-    'Tired': Icons.bedtime,
-    'Creative': Icons.palette,
-    'Focused': Icons.track_changes,
-  };
-
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Choose Mood'),
-      content: SizedBox(
-        width: double.maxFinite,
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemCount: presetMoods.length,
-          itemBuilder: (context, index) {
-            final entry = presetMoods.entries.elementAt(index);
-            return InkWell(
-              onTap: () {
-                Navigator.pop(context);
-                _showMoodboardCaptionDialog(entry.key, true);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.pink.shade200),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(entry.value, color: Colors.pink.shade300),
-                    const SizedBox(height: 4),
-                    Text(
-                      entry.key,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    ),
-  );
-}
-
-// Add this method to show caption dialog
-void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
-  final captionController = TextEditingController();
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Add Caption'),
-      content: TextField(
-        controller: captionController,
-        decoration: const InputDecoration(
-          labelText: 'Caption',
-          border: OutlineInputBorder(),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {
-              _moodboardImages.add(MoodboardItem(
-                imagePath: imagePath,
-                caption: captionController.text,
-                isAsset: isAsset,
-              ));
-            });
-            Navigator.pop(context);
-            _saveData();
-          },
-          child: const Text('Add'),
-        ),
-      ],
-    ),
-  );
-}
-
-
-
+    );
+  }
 
   IconData _getMoodIcon(String mood) {
     switch (mood.split('.').first) {
-      case 'happy': return Icons.sentiment_very_satisfied;
-      case 'sad': return Icons.sentiment_very_dissatisfied;
-      case 'excited': return Icons.celebration;
-      case 'peaceful': return Icons.spa;
-      case 'energetic': return Icons.flash_on;
-      case 'tired': return Icons.bedtime;
-      case 'creative': return Icons.palette;
-      case 'focused': return Icons.track_changes;
-      default: return Icons.emoji_emotions;
+      case 'happy':
+        return Icons.sentiment_very_satisfied;
+      case 'sad':
+        return Icons.sentiment_very_dissatisfied;
+      case 'excited':
+        return Icons.celebration;
+      case 'peaceful':
+        return Icons.spa;
+      case 'energetic':
+        return Icons.flash_on;
+      case 'tired':
+        return Icons.bedtime;
+      case 'creative':
+        return Icons.palette;
+      case 'focused':
+        return Icons.track_changes;
+      default:
+        return Icons.emoji_emotions;
     }
   }
 
-  String getActivity(String? analyzedMood){
-    if(analyzedMood == null) return 'Your joy is contagious! Keep shining!';
-    switch (analyzedMood.toLowerCase()){
+  String getActivity(String? analyzedMood) {
+    if (analyzedMood == null) return 'Your joy is contagious! Keep shining!';
+    switch (analyzedMood.toLowerCase()) {
       case 'happy':
         return 'Your joy is contagious! Keep shining!';
       case 'content':
@@ -402,7 +407,7 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
         final titleController = TextEditingController();
         final contentController = TextEditingController();
         String selectedMood = 'happy';
-        
+
         return StatefulBuilder(
           builder: (context, setState) => AlertDialog(
             title: const Text('New Journal Entry'),
@@ -428,9 +433,9 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                   ),
                   const SizedBox(height: 16),
                   FutureBuilder<String>(
-                    future: contentController.text.isNotEmpty 
-                      ? _analyzeMood(contentController.text)
-                      : Future.value('happy'),
+                    future: contentController.text.isNotEmpty
+                        ? _analyzeMood(contentController.text)
+                        : Future.value('happy'),
                     builder: (context, snapshot) {
                       selectedMood = snapshot.data ?? 'happy';
                       return DropdownButton<String>(
@@ -464,7 +469,8 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
               TextButton(
                 onPressed: () async {
                   // Analyze mood before saving
-                  final analyzedMood = await _analyzeMood(contentController.text);
+                  final analyzedMood =
+                      await _analyzeMood(contentController.text);
                   final printString = getActivity(analyzedMood);
                   print(printString);
                   setState(() {
@@ -477,10 +483,10 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                   });
                   Navigator.pop(context);
                   _saveData();
-                  
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('$printString'),
+                      content: Text(printString),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -584,7 +590,8 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
     });
 
     _textController.clear();
-    final userPrompt = 'analyse the mood of the user in 1 word from happy, sad, calm, content, angry, anxious, without any tables or graphics, if this is the text they are writing in journal: $userMessage.';
+    final userPrompt =
+        'analyse the mood of the user in 1 word from happy, sad, calm, content, angry, anxious, without any tables or graphics, if this is the text they are writing in journal: $userMessage.';
     // Send the message to Gemini and print the response in the terminal
     _getGeminiResponse(userPrompt);
   }
@@ -592,10 +599,9 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
   void _getGeminiResponse(String userMessage) async {
     try {
       await for (var event in gemini.streamGenerateContent(userMessage)) {
-        final responseText = event.content?.parts
-                ?.map((part) => part.text)
-                .join(" ") ??
-            "No response available";
+        final responseText =
+            event.content?.parts?.map((part) => part.text).join(" ") ??
+                "No response available";
 
         // Print the Gemini response to the terminal
         print("Gemini: $responseText");
@@ -653,7 +659,7 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
-         controller: _thoughtsController,
+                controller: _thoughtsController,
                 maxLines: 5,
                 style: TextStyle(
                   fontFamily: _selectedFont,
@@ -671,30 +677,29 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-            //     VoiceInputWidget(
-            //   onTextRecognized: (text) {
-            //     setState(() {
-            //       _thoughtsController.text = text;
-            //     });
-            //   },
-            // ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
-                onPressed: _saveData,
-                icon: const Icon(Icons.save),
-                label: const Text('Save'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 248, 169, 195),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                //     VoiceInputWidget(
+                //   onTextRecognized: (text) {
+                //     setState(() {
+                //       _thoughtsController.text = text;
+                //     });
+                //   },
+                // ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    onPressed: _saveData,
+                    icon: const Icon(Icons.save),
+                    label: const Text('Save'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 248, 169, 195),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
               ],
             ),
-            
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -712,90 +717,93 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                 ),
               ],
             ),
-          Container(
-  height: 150,
-  decoration: BoxDecoration(
-    color: Colors.grey.shade100,
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: _moodboardImages.isEmpty
-      ? const Center(
-          child: Text(
-            'Add images to your moodboard',
-            style: TextStyle(color: Colors.grey),
-          ),
-        )
-      : ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: _moodboardImages.length,
-          itemBuilder: (context, index) {
-            final item = _moodboardImages[index];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Delete Image'),
-                      content: const Text('Remove this from your moodboard?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _moodboardImages.removeAt(index);
-                            });
-                            Navigator.pop(context);
-                            _saveData();
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.pink.shade200),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: item.isAsset
-                          ? Icon(
-                              _getMoodIcon(item.imagePath),
-                              size: 40,
-                              color: Colors.pink.shade300,
-                            )
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                File(item.imagePath),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item.caption,
-                      style: const TextStyle(fontSize: 12),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
               ),
-            );
-          },
-        ),
-),
-             const SizedBox(height: 24),
+              child: _moodboardImages.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Add images to your moodboard',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _moodboardImages.length,
+                      itemBuilder: (context, index) {
+                        final item = _moodboardImages[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Delete Image'),
+                                  content: const Text(
+                                      'Remove this from your moodboard?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _moodboardImages.removeAt(index);
+                                        });
+                                        Navigator.pop(context);
+                                        _saveData();
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.pink.shade200),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: item.isAsset
+                                      ? Icon(
+                                          _getMoodIcon(item.imagePath),
+                                          size: 40,
+                                          color: Colors.pink.shade300,
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Image.file(
+                                            File(item.imagePath),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item.caption,
+                                  style: const TextStyle(fontSize: 12),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+            const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -820,7 +828,8 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                               title: const Text('Date (Newest First)'),
                               onTap: () {
                                 setState(() {
-                                  _journalEntries.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+                                  _journalEntries.sort((a, b) =>
+                                      b.dateTime.compareTo(a.dateTime));
                                 });
                                 Navigator.pop(context);
                               },
@@ -829,7 +838,8 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                               title: const Text('Date (Oldest First)'),
                               onTap: () {
                                 setState(() {
-                                  _journalEntries.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                                  _journalEntries.sort((a, b) =>
+                                      a.dateTime.compareTo(b.dateTime));
                                 });
                                 Navigator.pop(context);
                               },
@@ -838,7 +848,8 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
                               title: const Text('Title'),
                               onTap: () {
                                 setState(() {
-                                  _journalEntries.sort((a, b) => a.title.compareTo(b.title));
+                                  _journalEntries.sort(
+                                      (a, b) => a.title.compareTo(b.title));
                                 });
                                 Navigator.pop(context);
                               },
@@ -940,7 +951,6 @@ void _showMoodboardCaptionDialog(String imagePath, bool isAsset) {
   }
 }
 
-
 class MoodboardItem {
   final String imagePath; // Can be either asset path or file path
   final String caption;
@@ -952,6 +962,7 @@ class MoodboardItem {
     this.isAsset = true,
   });
 }
+
 class JournalEntry {
   final String title;
   final String content;

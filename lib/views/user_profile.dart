@@ -1,26 +1,14 @@
-import 'package:aura_techwizard/models/user.dart' as ModelUser;
-import 'package:aura_techwizard/resources/user_provider.dart';
-import 'package:aura_techwizard/views/auth_screens/login.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'dart:io';
-
 
 import 'package:aura_techwizard/models/user.dart' as ModelUser;
 import 'package:aura_techwizard/resources/user_provider.dart';
 import 'package:aura_techwizard/views/auth_screens/login.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class PastelColors {
   static const Color pastelGreen = Color(0xFFB8E3A7);
@@ -43,7 +31,7 @@ class AuthMethods {
 }
 
 class UserScreen extends StatelessWidget {
-  const UserScreen({Key? key}) : super(key: key);
+  const UserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +54,7 @@ class UserScreen extends StatelessWidget {
             onTap: () async {
               await AuthMethods().signOut();
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => LoginScreen())
-              );
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
             },
             child: Icon(Icons.logout, color: Colors.black),
           ),
@@ -86,13 +73,14 @@ class UserScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 90,
-                        backgroundImage: NetworkImage(user!.photoUrl),
+                        backgroundImage: NetworkImage(user.photoUrl),
                         backgroundColor: PastelColors.pastelPink,
                       ),
                       Positioned(
                         bottom: 20,
                         right: 0,
-                        child: Icon(Icons.add_a_photo, size: 30, color: PastelColors.pastelPurple),
+                        child: Icon(Icons.add_a_photo,
+                            size: 30, color: PastelColors.pastelPurple),
                       ),
                     ],
                   ),
@@ -132,9 +120,9 @@ class EditProfileScreen extends StatefulWidget {
   final ModelUser.User currentUser;
 
   const EditProfileScreen({
-    Key? key,
+    super.key,
     required this.currentUser,
-  }) : super(key: key);
+  });
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -152,9 +140,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _fullnameController = TextEditingController(text: widget.currentUser.fullname);
-    _usernameController = TextEditingController(text: widget.currentUser.username);
-    _contactNumberController = TextEditingController(text: widget.currentUser.contactnumber);
+    _fullnameController =
+        TextEditingController(text: widget.currentUser.fullname);
+    _usernameController =
+        TextEditingController(text: widget.currentUser.username);
+    _contactNumberController =
+        TextEditingController(text: widget.currentUser.contactnumber);
     _profileImageUrl = widget.currentUser.photoUrl;
   }
 
@@ -167,9 +158,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _selectImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
     if (image != null) {
       setState(() {
         _imageFile = File(image.path);
@@ -185,7 +176,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           .ref()
           .child('profile_pictures')
           .child('${widget.currentUser.uid}.jpg');
-      
+
       await storageRef.putFile(_imageFile!);
       String downloadUrl = await storageRef.getDownloadURL();
       return downloadUrl;
@@ -219,15 +210,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           .collection('users')
           .doc(widget.currentUser.uid)
           .get();
-      
+
       ModelUser.User updatedUser = ModelUser.User.fromSnap(userSnap);
-      
-      Provider.of<UserProvider>(context, listen: false).refreshUser(updatedUser);
+
+      Provider.of<UserProvider>(context, listen: false)
+          .refreshUser(updatedUser);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Profile updated successfully')),
       );
-      
+
       Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -257,7 +249,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   CircleAvatar(
                     radius: 64,
-                    backgroundImage: _imageFile != null 
+                    backgroundImage: _imageFile != null
                         ? FileImage(_imageFile!) as ImageProvider
                         : NetworkImage(_profileImageUrl),
                     backgroundColor: PastelColors.pastelYellow,
@@ -267,7 +259,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     left: 80,
                     child: IconButton(
                       onPressed: _selectImage,
-                      icon: Icon(Icons.add_a_photo, color: PastelColors.pastelBlue),
+                      icon: Icon(Icons.add_a_photo,
+                          color: PastelColors.pastelBlue),
                     ),
                   ),
                 ],
@@ -347,7 +340,9 @@ Widget userProfDisplay(BuildContext context, String label, String value) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.black)),
+      Text(label,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 17, color: Colors.black)),
       SizedBox(height: 5),
       Container(
         width: double.infinity,
@@ -359,7 +354,8 @@ Widget userProfDisplay(BuildContext context, String label, String value) {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(value, style: TextStyle(fontSize: 20, color: Colors.black)),
+          child:
+              Text(value, style: TextStyle(fontSize: 20, color: Colors.black)),
         ),
       ),
     ],
@@ -372,7 +368,8 @@ Widget circularGradientContainer(String text, BuildContext context) {
     width: MediaQuery.of(context).size.width * 0.4,
     alignment: Alignment.center,
     decoration: BoxDecoration(
-      gradient: LinearGradient(colors: [PastelColors.pastelPurple, PastelColors.pastelBlue]),
+      gradient: LinearGradient(
+          colors: [PastelColors.pastelPurple, PastelColors.pastelBlue]),
       borderRadius: BorderRadius.circular(25),
       border: Border.all(color: PastelColors.pastelPink),
     ),

@@ -233,7 +233,8 @@ class _LikeAnimationState extends State<LikeAnimation>
       child: IconTheme(
         data: IconThemeData(
           // If liked or animating, change the color to red, otherwise keep it grey
-          color: widget.isLiked || widget.isAnimating ? Colors.red : Colors.grey,
+          color:
+              widget.isLiked || widget.isAnimating ? Colors.red : Colors.grey,
         ),
         child: widget.child,
       ),
